@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<users id="1" name="Banan" email="host@test.com" password="123"></users>
+	<users id="2" name="Nitro" email="ntr@test.com" password="123"></users>
+	<users id="3" name="Mate" email="mte@test.com" password="123"></users>
+	<users id="4" name="Tan" email="tan@test.com" password="123"></users>
+	<users id="5" name="User" email="user@test.com" password="123"></users>
+	<users id="6" name="noname" email="nnm@test.com" password="123"></users>
+	<users id="7" name="test" email="test@test.com" password="123"></users>
+	<users id="8" name="Victor" email="vic@test.com" password="123"></users>
+</dataset>
