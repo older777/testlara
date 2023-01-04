@@ -23,7 +23,7 @@ Route::get('/second', [
 Route::get('/product/{page?}', [
     'as' => 'productpage',
     'uses' => 'App\Http\Controllers\MainPageController@productPage'
-])->where('page','[^(add|delete)]');
+])->where('page', '[^(add|delete)]');
 Route::get('/product/add', [
     'as' => 'productpage.add',
     'uses' => 'App\Http\Controllers\MainPageController@productAdd'
