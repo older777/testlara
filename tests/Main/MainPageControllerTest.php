@@ -25,7 +25,7 @@ class MainPageControllerTest extends TestCase
 
     protected static $data;
 
-    protected $invok;
+    protected $invok, $close;
 
     /**
      *
@@ -54,7 +54,6 @@ class MainPageControllerTest extends TestCase
         // TODO Auto-generated MainPageControllerTest::setUp()
 
         $this->mainPageController = new MainPageController(/* parameters */);
-
         $this->invok = new Invoker();
     }
 
@@ -191,12 +190,66 @@ class MainPageControllerTest extends TestCase
     {
         DB::statement('SET autocommit=OFF;');
         DB::beginTransaction();
-
         $count = ProductModel::all()->count();
-        $this->assertNotEmpty($this->mainPageController->productDelete((int)$in));
+        $this->assertNotEmpty($this->mainPageController->productDelete((int) $in));
         $count2 = ProductModel::all()->count();
         $this->assertLessThan($count, $count2);
-
         DB::rollBack();
+
+        // создать и настроить заглушку
+        $close = $this->createMock(MainPageController::class);
+        $close->method('productDelete')->willReturn('Продукт удалён');
+
+        $out = $close->productDelete((int) $in);
+        $this->assertNotEmpty($out);
+    }
+
+    /**
+     * Двойник MainPageController
+     * метод mainpage
+     */
+    public function testMainPageMock()
+    {
+        $request = new Request();
+        $close = $this->getMockBuilder(MainPageController::class)
+        ->onlyMethods([
+            'mainPage'
+        ])
+        ->getMock();
+        $close->expects($this->exactly(3))
+        ->method('mainPage')->withConsecutive(
+            [$this->equalTo(1), $request], 
+            [$this->greaterThan(1), $request], 
+            [3, $request]
+        );
+        $out = $close->mainPage(1, new Request());
+        //$this->assertSame("Page is: 1", );
+        //$out = $close->mainPage($in, new Request());
+        //$this->assertSame("Page is: {$in}", $out);
+        //$this->assertSame(2, $close->secondPage());
+        //$this->assertSame(3, $close->secondPage());
+        //$this->assertSame(4, $close->secondPage());
+        $out = $close->mainPage(30, new Request());
+        $out = $close->mainPage(3, new Request());
+    }
+    
+    /**
+     * Двойник MainPageController 
+     * метод secondpage
+     */
+    public function testSecondPageMock()
+    {
+        $close = $this->getMockBuilder(MainPageController::class)
+            ->onlyMethods([
+            'secondPage'
+        ])
+            ->getMock();
+        $close->expects($this->once())
+            ->method('secondPage')->willReturnOnConsecutiveCalls(1, 2, 3, 4, 5, 8);
+        //$out = $close->secondPage();
+        $this->assertSame(1, $close->secondPage());
+        //$this->assertSame(2, $close->secondPage());
+        //$this->assertSame(3, $close->secondPage());
+        //$this->assertSame(4, $close->secondPage());
     }
 }
