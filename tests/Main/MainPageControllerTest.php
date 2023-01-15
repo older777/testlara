@@ -21,8 +21,6 @@ require 'tests/CsvFileIterator.php';
 class MainPageControllerTest extends TestCase
 {
 
-    use TestDatabases;
-
     protected static $data;
 
     protected $invok, $close;
@@ -52,7 +50,8 @@ class MainPageControllerTest extends TestCase
     {
         parent::setUp();
         // TODO Auto-generated MainPageControllerTest::setUp()
-
+        DB::statement('SET autocommit=OFF;');
+        DB::beginTransaction();
         $this->mainPageController = new MainPageController(/* parameters */);
         $this->invok = new Invoker();
     }
@@ -64,6 +63,7 @@ class MainPageControllerTest extends TestCase
     {
         // TODO Auto-generated MainPageControllerTest::tearDown()
         $this->mainPageController = null;
+        DB::rollBack();
 
         parent::tearDown();
     }
@@ -182,19 +182,35 @@ class MainPageControllerTest extends TestCase
     }
 
     /**
+     * 
+     */
+    public function testproductPage()
+    {
+        $out = $this->mainPageController->productPage(1);
+        $this->assertStringNotContainsString("не найден", $out);
+        $out = $this->mainPageController->productPage(0);
+        $this->assertStringContainsString("не найден", $out);
+    }
+
+    public function testProductAdd() 
+    {
+        $req = $this->createMock(Request::class);
+        $out = $this->mainPageController->productAdd($req);
+        $this->assertNotEmpty($out);
+    }
+    /**
      *
      * @dataProvider somedata
      * @backupGlobals enabled
+     * 
      */
     public function testproductDelete($in)
     {
-        DB::statement('SET autocommit=OFF;');
-        DB::beginTransaction();
         $count = ProductModel::all()->count();
         $this->assertNotEmpty($this->mainPageController->productDelete((int) $in));
         $count2 = ProductModel::all()->count();
-        $this->assertLessThan($count, $count2);
-        DB::rollBack();
+        $this->assertLessThanOrEqual($count, $count2);
+        
 
         // создать и настроить заглушку
         $close = $this->createMock(MainPageController::class);

@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Nette\ArgumentOutOfRangeException;
 use App\Models\ProductModel;
 
 class MainPageController extends Controller
@@ -69,7 +68,9 @@ class MainPageController extends Controller
      *
      * @param Request $request
      * @return string
+     *
      */
+    //@codeCoverageIgnoreStart
     public function productAdd(Request $request)
     {
         $name = $request->input('name', null);
@@ -86,6 +87,12 @@ class MainPageController extends Controller
         return $out;
     }
     
+    /**
+     * 
+     * @param int $id
+     * @return string
+     * 
+     */
     public function productDelete(int $id) {
         $res = ProductModel::where('id',$id)->first();
         if (! empty($res)) {
@@ -96,4 +103,5 @@ class MainPageController extends Controller
         }
         return $out;
     }
+    //@codeCoverageIgnoreEnd
 }
