@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('vars:print {key?}', function ($key = null) {
+    if (!empty($key)){
+        echo $_ENV[$key]."\r\n";
+    }else{
+        foreach ($_ENV as $k=>$row) echo "$k=$row\r\n";
+    }
+})->describe('Variables in ENV file');
