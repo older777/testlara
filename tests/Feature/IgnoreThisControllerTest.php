@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\IgnoreThisController;
 use Tests\TestCase;
+
 /**
  * IgnoreThisController test case.
  */
@@ -38,6 +39,7 @@ class IgnoreThisControllerTest extends TestCase
 
     /**
      * Tests IgnoreThisController->my()
+     *
      * @group ignore
      */
     public function testMy()
@@ -48,12 +50,15 @@ class IgnoreThisControllerTest extends TestCase
     /**
      * Tests IgnoreThisController->ok()
      * @ group ignore
+     *
      * @covers App\Http\Controllers\IgnoreThisController::ok
      */
     public function testOk()
     {
         $this->assertNull($this->ignoreThisController->ok(/* parameters */));
-        $this->assertFileEquals(public_path('test1'),public_path('test2'));
+        $this->assertFileIsReadable(public_path('test1'));
+        $this->assertFileIsReadable(public_path('test2'));
+        $this->assertFileEquals(public_path('test1'), public_path('test2'));
     }
 }
 
