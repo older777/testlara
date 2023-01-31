@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 namespace Tests\Main;
 
 use App\Http\Controllers\MainPageController;
@@ -162,10 +161,10 @@ class MainPageControllerTest extends TestCase
         $GLOBALS['testy'] = null;
         $cb = function () use ($in) {
             echo $this->mainPageController->nextPage((int) $in);
-            // sleep(intval($in));
+            sleep(intval($in));
         };
         try {
-            $this->invok->invoke($cb, [], 4);
+            $this->invok->invoke($cb, [], 5);
         } catch (TimeoutException $e) {
             throw new \Exception('time is out!');
         }
@@ -267,5 +266,6 @@ class MainPageControllerTest extends TestCase
         //$this->assertSame(2, $close->secondPage());
         //$this->assertSame(3, $close->secondPage());
         //$this->assertSame(4, $close->secondPage());
+        $this->assertInfinite(log(0));
     }
 }

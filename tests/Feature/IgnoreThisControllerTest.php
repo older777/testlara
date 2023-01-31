@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\IgnoreThisController;
 use Tests\TestCase;
+use App\Http\Controllers\Controller;
+use function PHPUnit\Framework\callback;
 
 /**
  * IgnoreThisController test case.
@@ -59,6 +61,11 @@ class IgnoreThisControllerTest extends TestCase
         $this->assertFileIsReadable(public_path('test1'));
         $this->assertFileIsReadable(public_path('test2'));
         $this->assertFileEquals(public_path('test1'), public_path('test2'));
+        $this->assertInstanceOf(Controller::class, $this->ignoreThisController);
+        $f = function(){
+            return 1;
+        };
+        $this->assertThat($f(), $this->logicalNot($this->isType('array')));
     }
 }
 
