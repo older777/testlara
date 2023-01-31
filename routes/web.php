@@ -32,3 +32,5 @@ Route::get('/product/delete/{id}', [
     'as' => 'productpage.del',
     'uses' => 'App\Http\Controllers\MainPageController@productDelete'
 ]);
+
+Route::get('/currex', ['as' => 'currex.alias', 'uses' => 'App\Http\Controllers\CurrExController@page']);
