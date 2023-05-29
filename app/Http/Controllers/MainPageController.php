@@ -14,9 +14,9 @@ class MainPageController extends Controller
      * @param Request $request
      * @return string
      */
-    public function mainPage(Int $id = 0, Request $request)
+    public function mainPage(ProductModel $id = null)
     {
-        $page = $request->input('page', $id);
+        $page = ! empty($id) ? collect($id->toArray()) : 'empty product';
         return "Page is: $page";
     }
 
@@ -27,7 +27,7 @@ class MainPageController extends Controller
      * @throws \InvalidArgumentException
      * @return string
      */
-    public function secondPage($test = false)
+    public function secondPage(bool $test = false)
     {
         if ($test > 0) {
             throw new \InvalidArgumentException('test', null);
@@ -68,9 +68,8 @@ class MainPageController extends Controller
      *
      * @param Request $request
      * @return string
-     *
      */
-    //@codeCoverageIgnoreStart
+    // @codeCoverageIgnoreStart
     public function productAdd(Request $request)
     {
         $name = $request->input('name', null);
@@ -86,15 +85,15 @@ class MainPageController extends Controller
         }
         return $out;
     }
-    
+
     /**
-     * 
+     *
      * @param int $id
      * @return string
-     * 
      */
-    public function productDelete(int $id) {
-        $res = ProductModel::where('id',$id)->first();
+    public function productDelete(int $id)
+    {
+        $res = ProductModel::where('id', $id)->first();
         if (! empty($res)) {
             $res->delete();
             $out = "Продукт удалён!";

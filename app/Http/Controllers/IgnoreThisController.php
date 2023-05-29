@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class IgnoreThisController extends Controller
 {
@@ -17,6 +18,7 @@ class IgnoreThisController extends Controller
     
     public function ok() 
     {
+        Log::info('123');
         return self::my();
     }
 }

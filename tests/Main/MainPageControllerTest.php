@@ -111,7 +111,8 @@ class MainPageControllerTest extends TestCase
         // TODO Auto-generated MainPageControllerTest->testMainPage()
         // $this->markTestIncomplete("mainPage test not implemented");
         $request = new Request();
-        $out = $this->mainPageController->mainPage(1, $request);
+        $mockProductModel = $this->createMock(ProductModel::class);
+        $out = $this->mainPageController->mainPage($mockProductModel);
         $this->assertNotEmpty($out);
         return (bool) true;
     }
@@ -181,7 +182,6 @@ class MainPageControllerTest extends TestCase
     }
 
     /**
-     * 
      */
     public function testproductPage()
     {
@@ -191,17 +191,18 @@ class MainPageControllerTest extends TestCase
         $this->assertStringContainsString("не найден", $out);
     }
 
-    public function testProductAdd() 
+    public function testProductAdd()
     {
         $req = $this->createMock(Request::class);
         $out = $this->mainPageController->productAdd($req);
         $this->assertNotEmpty($out);
     }
+
     /**
      *
      * @dataProvider somedata
      * @backupGlobals enabled
-     * 
+     *
      */
     public function testproductDelete($in)
     {
@@ -209,7 +210,6 @@ class MainPageControllerTest extends TestCase
         $this->assertNotEmpty($this->mainPageController->productDelete((int) $in));
         $count2 = ProductModel::all()->count();
         $this->assertLessThanOrEqual($count, $count2);
-        
 
         // создать и настроить заглушку
         $close = $this->createMock(MainPageController::class);
@@ -225,31 +225,34 @@ class MainPageControllerTest extends TestCase
      */
     public function testMainPageMock()
     {
-        $request = new Request();
         $close = $this->getMockBuilder(MainPageController::class)
-        ->onlyMethods([
+            ->onlyMethods([
             'mainPage'
         ])
-        ->getMock();
+            ->getMock();
         $close->expects($this->exactly(3))
-        ->method('mainPage')->withConsecutive(
-            [$this->equalTo(1), $request], 
-            [$this->greaterThan(1), $request], 
-            [3, $request]
-        );
-        $out = $close->mainPage(1, new Request());
-        //$this->assertSame("Page is: 1", );
-        //$out = $close->mainPage($in, new Request());
-        //$this->assertSame("Page is: {$in}", $out);
-        //$this->assertSame(2, $close->secondPage());
-        //$this->assertSame(3, $close->secondPage());
-        //$this->assertSame(4, $close->secondPage());
-        $out = $close->mainPage(30, new Request());
-        $out = $close->mainPage(3, new Request());
+            ->method('mainPage')
+            ->withConsecutive([
+            $this->equalTo(1)
+        ], [
+            $this->greaterThan(1)
+        ], [
+            3
+        ]);
+        $mockProductModel = $this->createMock(ProductModel::class);
+        $out = $close->mainPage($mockProductModel);
+        // $this->assertSame("Page is: 1", );
+        // $out = $close->mainPage($in, new Request());
+        // $this->assertSame("Page is: {$in}", $out);
+        // $this->assertSame(2, $close->secondPage());
+        // $this->assertSame(3, $close->secondPage());
+        // $this->assertSame(4, $close->secondPage());
+        $out = $close->mainPage(30);
+        $out = $close->mainPage(3);
     }
-    
+
     /**
-     * Двойник MainPageController 
+     * Двойник MainPageController
      * метод secondpage
      */
     public function testSecondPageMock()
@@ -260,7 +263,8 @@ class MainPageControllerTest extends TestCase
         ])
             ->getMock();
         $close->expects($this->once())
-            ->method('secondPage')->willReturnOnConsecutiveCalls(1, 2, 3, 4, 5, 8);
+            ->method('secondPage')
+            ->willReturnOnConsecutiveCalls(1, 2, 3, 4, 5, 8);
         //$out = $close->secondPage();
         $this->assertSame(1, $close->secondPage());
         //$this->assertSame(2, $close->secondPage());
