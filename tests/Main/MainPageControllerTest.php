@@ -173,15 +173,6 @@ class MainPageControllerTest extends TestCase
     }
 
     /**
-     *
-     * @requires function my_count
-     */
-    public function testFunc()
-    {
-        $this->markTestIncomplete('Реализуй тест!');
-    }
-
-    /**
      */
     public function testproductPage()
     {
