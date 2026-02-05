@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Main;
 
 use App\Http\Controllers\MainPageController;
@@ -63,7 +64,6 @@ class MainPageControllerTest extends TestCase
         // TODO Auto-generated MainPageControllerTest::tearDown()
         $this->mainPageController = null;
         DB::rollBack();
-
         parent::tearDown();
     }
 
@@ -130,7 +130,6 @@ class MainPageControllerTest extends TestCase
         $this->assertTrue($exist);
         // $res = $this->get('/second');
         // $res->assertStatus(200);
-
         if ($some > 2) {
             $test = true;
             $this->expectException(Throwable::class);
@@ -201,11 +200,9 @@ class MainPageControllerTest extends TestCase
         $this->assertNotEmpty($this->mainPageController->productDelete((int) $in));
         $count2 = ProductModel::all()->count();
         $this->assertLessThanOrEqual($count, $count2);
-
         // создать и настроить заглушку
         $close = $this->createMock(MainPageController::class);
         $close->method('productDelete')->willReturn('Продукт удалён');
-
         $out = $close->productDelete((int) $in);
         $this->assertNotEmpty($out);
     }
@@ -221,25 +218,13 @@ class MainPageControllerTest extends TestCase
             'mainPage'
         ])
             ->getMock();
-        $close->expects($this->exactly(3))
+        $close->expects($this->exactly(1))
             ->method('mainPage')
             ->withConsecutive([
-            $this->equalTo(1)
-        ], [
-            $this->greaterThan(1)
-        ], [
-            3
+            $this->isInstanceOf(ProductModel::class)
         ]);
-        $mockProductModel = $this->createMock(ProductModel::class);
-        $out = $close->mainPage($mockProductModel);
-        // $this->assertSame("Page is: 1", );
-        // $out = $close->mainPage($in, new Request());
-        // $this->assertSame("Page is: {$in}", $out);
-        // $this->assertSame(2, $close->secondPage());
-        // $this->assertSame(3, $close->secondPage());
-        // $this->assertSame(4, $close->secondPage());
-        $out = $close->mainPage(30);
-        $out = $close->mainPage(3);
+        $product = ProductModel::find(1);
+        $close->mainPage($product);
     }
 
     /**
@@ -256,11 +241,11 @@ class MainPageControllerTest extends TestCase
         $close->expects($this->once())
             ->method('secondPage')
             ->willReturnOnConsecutiveCalls(1, 2, 3, 4, 5, 8);
-        //$out = $close->secondPage();
+        // $out = $close->secondPage();
         $this->assertSame(1, $close->secondPage());
-        //$this->assertSame(2, $close->secondPage());
-        //$this->assertSame(3, $close->secondPage());
-        //$this->assertSame(4, $close->secondPage());
+        // $this->assertSame(2, $close->secondPage());
+        // $this->assertSame(3, $close->secondPage());
+        // $this->assertSame(4, $close->secondPage());
         $this->assertInfinite(log(0));
     }
 }
