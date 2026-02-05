@@ -99,7 +99,7 @@ class MainPageControllerTest extends TestCase
     public function somedata()
     {
         // return $this->gen();
-        $obj = ('/var/www/testlara/tests/test.csv');
+        $obj = ('../test.csv');
         return new \CsvFileIterator($obj);
     }
 
